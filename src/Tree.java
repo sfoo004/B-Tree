@@ -49,21 +49,29 @@ public class Tree {
         }
         if(overflow()){
             overfilled();
+            parent = findParent(this);
+            parent.right = this;
+            parent.left = leftSibling;
         }
     }
     //splits the overfill
     public void overfilled(){
-        Tree temp = new Tree();
+        Tree temp = new Tree();//less than tree
        for(int i = 0; i < branches.size()/2 ; i++){
            temp.add(branches.remove(i));
        }
        //changes left sibilings
        temp.leftSibling = leftSibling;
-       leftSibling = temp;
-       //make a function to search for parent and select leftmost right value recursively
-       
-       
-        
+       leftSibling = temp;    
+    }
+    //make a function to search for parent and select leftmost right value recursively
+    public Branch findParent(Tree tree){
+        if(tree.leaf){
+            return tree.branches.get(0);
+        } else {
+            //searches next layer
+            return findParent(tree.branches.get(0).left);
+        }
         
     }
     
