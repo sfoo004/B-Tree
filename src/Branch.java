@@ -11,13 +11,15 @@
 public class Branch {
     
     int value;
+    BranchList currentList;
     BranchList left = null;
     BranchList right = null;
     boolean leaf = false;
-    Branch parent = new Branch();
+    Branch parent;
     
     
-    Branch(){
+    Branch(int value){
+        this.value = value;
     }
     
     protected void turnIntoLeaf(Branch b){
