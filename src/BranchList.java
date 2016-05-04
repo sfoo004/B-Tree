@@ -11,14 +11,14 @@ import java.util.LinkedList;
  *
  * @author sfoo004
  */
-public class Tree {
+public class BranchList {
     
     LinkedList<Branch> branches = new LinkedList<>();
-    Tree leftSibling = null;
-    Branch parent = new Branch();
+    BranchList leftSibling = null;
+    Branch parent = null;
     boolean leaf = false;
     
-    Tree(){      
+    BranchList(){      
     }
     
      protected boolean hasRoom(){
@@ -56,7 +56,7 @@ public class Tree {
     }
     //splits the overfill
     public void overfilled(){
-        Tree temp = new Tree();//less than tree
+        BranchList temp = new BranchList();//less than tree
        for(int i = 0; i < branches.size()/2 ; i++){
            temp.add(branches.remove(i));
        }
@@ -65,7 +65,7 @@ public class Tree {
        leftSibling = temp;    
     }
     //make a function to search for parent and select leftmost right value recursively
-    public Branch findParent(Tree tree){
+    public Branch findParent(BranchList tree){
         if(tree.leaf){
             return tree.branches.get(0);
         } else {

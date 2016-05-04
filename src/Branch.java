@@ -11,8 +11,8 @@
 public class Branch {
     
     int value;
-    Tree left = null;
-    Tree right = null;
+    BranchList left = null;
+    BranchList right = null;
     boolean leaf = false;
     Branch parent = new Branch();
     
