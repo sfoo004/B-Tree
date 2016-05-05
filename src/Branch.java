@@ -22,10 +22,6 @@ public class Branch {
         this.value = value;
     }
     
-    protected void turnIntoLeaf(Branch b){
-        
-    }
-    
     protected void insert(Branch b) {
         if (!leaf) {
             if (b.value < value) { // check if it belongs in left leaf
@@ -36,6 +32,14 @@ public class Branch {
                 right.add(b);
             }
         }
+    }
+    
+    protected BranchList search(int number){
+        if(number < value){
+            return left.find(number);
+        } else {
+            return right.find(number);
+        }  
     }
       
     

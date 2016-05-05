@@ -28,12 +28,7 @@ public class BranchList {
     protected boolean overflow(){
         return branches.size() > 4;
     }
-    
-    //adds item to Branch. Already checked for over flow
-    protected void add(Branch b){
-        //check to see if the list is over filled
-        //if it does split the list in half
-        
+    protected void insertBranch(Branch b){
         boolean added = false;
         for(int i = 0; i < branches.size(); i++){
             if(b.value > branches.get(i).value){
@@ -47,22 +42,67 @@ public class BranchList {
         if(!added){
             branches.addLast(b);
         }
-        if(overflow()){
-            overfilled();
-            parent = findParent(this);
-            parent.right = this;
-            parent.left = leftSibling;
+    }
+    //adds item to Branch. Already checked for over flow
+    protected void add(Branch b){
+        if(leaf){
+            insertBranch(b);
+            if(overflow()){
+                overfilled();
+            }
+        } else {
+            boolean added = false;
+            for(Branch branch: branches){
+                if(branch.value<b.value){
+                    continue;
+                } else {
+                    added = true;
+                    branch.left.add(b);
+                    break;
+                }
+            }
+            if(!added){
+                    branches.getLast().right.add(b);
+            }
+            if(overflow()) {
+                overfilled();
+            }
         }
     }
     //splits the overfill
     public void overfilled(){
-        BranchList temp = new BranchList();//less than tree
-       for(int i = 0; i < branches.size()/2 ; i++){
-           temp.add(branches.remove(i));
-       }
-       //changes left sibilings
-       temp.leftSibling = leftSibling;
-       leftSibling = temp;    
+        //if there is a parent then just add on to parents value
+        if(parent != null){
+            BranchList right = new BranchList();
+            right.leaf = true;
+            right.branches.add(branches.remove(0));
+            right.branches.add(branches.remove(0));
+            right.branches.add(branches.remove(0));
+            Branch newParent = findParent(right);
+            parent.currentList.add(newParent);
+            newParent.left = this;
+            newParent.right = right;  
+            newParent.right.leftSibling = newParent.left;
+            //if theer is no parent then this is a first time split.
+        } else {
+            BranchList left = new BranchList();
+            BranchList right = new BranchList();
+            left.leaf = true;
+            right.leaf = true;
+            left.branches.add(branches.remove(0));
+            left.branches.add(branches.remove(0));
+            right.branches.add(branches.remove(0));
+            right.branches.add(branches.remove(0));
+            right.branches.add(branches.remove(0));
+            Branch newParent =findParent(right);
+            newParent.left = left;
+            newParent.right = right;
+            newParent.currentList = this;
+            right.leftSibling = left;
+            this.add(newParent);
+            this.leaf = false;
+            
+        } 
     }
     //make a function to search for parent and select leftmost right value recursively
     public Branch findParent(BranchList tree){
@@ -77,7 +117,46 @@ public class BranchList {
     
     //if deleted value exists remove and return true. If not then return false
     protected boolean delete(int number){
-        return branches.removeFirstOccurrence(number);
+        boolean deleted = false;
+        BranchList temp = find(number);
+        if(temp != null){
+            for(Branch b: temp.branches){
+                if(b.value==number){
+                    temp.branches.remove(b);
+                    deleted = true;
+                    break;
+                }
+            }
+            
+        }
+        return deleted;
+    }
+    
+    protected BranchList find(int number) {
+        BranchList temp = null;
+        
+        if (leaf) {
+            for(Branch b: branches){
+                if(b.value == number){
+                    return this;
+                }
+            }
+        } else {
+            boolean largeNumber = false;
+            for (Branch b : branches) {
+                if (b.value < number) {
+                    continue;
+                } else {
+                    largeNumber = true;
+                    temp = b.search(number);
+                }
+                if (!largeNumber) {
+                   temp = branches.getLast().search(number);
+                }
+
+            }
+        }
+        return temp;
     }
     
 //    protected void inserted(int number){
