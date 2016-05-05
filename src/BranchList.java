@@ -35,6 +35,7 @@ public class BranchList {
                 continue;
             } else {
                 added = true;
+                b.leaf = this.leaf;
                 branches.add(i, b);
                 System.out.println(b.value + " added to the tree");
                 break;
@@ -78,16 +79,19 @@ public class BranchList {
             BranchList right = new BranchList();
             right.leaf = true;
            //add parent
-            right.branches.add(branches.remove(0));
-            right.branches.add(branches.remove(0));
-            right.branches.add(branches.remove(0));
+            right.branches.add(branches.remove(2));
+            right.branches.add(branches.remove(2));
+            right.branches.add(branches.remove(2));
             Branch newParent = findParent(right);
             System.out.println("Splitting the list... promote "+ newParent.value + " as a key");
-            parent.currentList.add(newParent);
+            parent.currentList.insertBranch(newParent);
             addParent(newParent, right);
             newParent.left = this;
             newParent.right = right;  
             newParent.right.leftSibling = newParent.left;
+            if(parent.currentList.overflow()){
+                overfilled();
+            }
             //if theer is no parent then this is a first time split.
         } else {
             BranchList left = new BranchList();

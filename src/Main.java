@@ -56,6 +56,8 @@ public class Main {
                 } else {
                     bw.write("Item " + f + " was not found on the tree");   
                 }
+            } else {
+                System.out.println("Invalid Input");
             }
         }
         printTree(rootList);
