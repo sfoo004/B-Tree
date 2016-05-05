@@ -36,11 +36,13 @@ public class BranchList {
             } else {
                 added = true;
                 branches.add(i, b);
+                System.out.println(b.value + " added to the tree");
                 break;
             }
         }
         if(!added){
-            branches.addLast(b);
+            branches.add(b);
+            System.out.println(b.value + " added to the tree");
         }
     }
     //adds item to Branch. Already checked for over flow
@@ -80,6 +82,7 @@ public class BranchList {
             right.branches.add(branches.remove(0));
             right.branches.add(branches.remove(0));
             Branch newParent = findParent(right);
+            System.out.println("Splitting the list... promote "+ newParent.value + " as a key");
             parent.currentList.add(newParent);
             addParent(newParent, right);
             newParent.left = this;
@@ -103,6 +106,7 @@ public class BranchList {
             addParent(newParent, right);
             addParent(newParent, left);
             newParent.currentList = this;
+            System.out.println("Splitting the list... promote "+ newParent.value + " as a key");
             right.leftSibling = left;
             this.add(newParent);
             this.leaf = false;
@@ -137,10 +141,13 @@ public class BranchList {
             for(Branch b: temp.branches){
                 if(b.value==number){
                     temp.branches.remove(b);
+                    System.out.println("deleteing..." + number);
                     deleted = true;
-                    if(temp.parent.value==number){
+                    if(!temp.leaf && temp.parent.value==number){
+                        System.out.println("deleted key");
                         temp.parent.value = temp.branches.get(0).value;
                         addParent(temp.parent, temp);
+                        System.out.println("replaced key with " + temp.parent.value);
                     }
                     break;
                 }
@@ -176,46 +183,5 @@ public class BranchList {
         }
         return temp;
     }
-    
-//    protected void inserted(int number){
-//        for(int i = 0; i < children.size(); i++){
-//            //if something is in the list but overflow
-//            if(children.get(i).overflow()){
-//                //check left side of child size == 4 
-//                if(children.get(i).left.overflow()){
-//                   //grab item 2 and 3. Make 2 a branch and add 3 and 4 as branches to it. 
-//                    
-//                } else {
-//                    //grab item 2 and 3. Make 2 a branch and add 3 and 4 as branches to it. 
-//                    
-//                }
-//                break;
-//            }
-//            //if something is in the list but no overflow
-//            else if(number > children.get(i).value){
-//                continue;
-//            } else {
-//                children.get(i).insert(number);
-//                break;
-//            }
-//        }
-//        //if nothing is in the list
-//        if(children.size()==0){
-//            Branch b = new Branch();
-//            b.value = number;
-//            b.right.add(number);
-//        }
-//    }
-//    
-//    protected boolean deleted(int number){
-//        for(int i = 0; i < children.size(); i++){
-//            if(number > children.get(i).value){
-//                continue;
-//            } else {
-//                return children.get(i).delete(number);
-//            }
-//        }
-//        return false;
-//    }
     
 }
