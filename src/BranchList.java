@@ -75,11 +75,13 @@ public class BranchList {
         if(parent != null){
             BranchList right = new BranchList();
             right.leaf = true;
+           //add parent
             right.branches.add(branches.remove(0));
             right.branches.add(branches.remove(0));
             right.branches.add(branches.remove(0));
             Branch newParent = findParent(right);
             parent.currentList.add(newParent);
+            addParent(newParent, right);
             newParent.left = this;
             newParent.right = right;  
             newParent.right.leftSibling = newParent.left;
@@ -89,6 +91,7 @@ public class BranchList {
             BranchList right = new BranchList();
             left.leaf = true;
             right.leaf = true;
+            //ad parent
             left.branches.add(branches.remove(0));
             left.branches.add(branches.remove(0));
             right.branches.add(branches.remove(0));
@@ -97,12 +100,23 @@ public class BranchList {
             Branch newParent =findParent(right);
             newParent.left = left;
             newParent.right = right;
+            addParent(newParent, right);
+            addParent(newParent, left);
             newParent.currentList = this;
             right.leftSibling = left;
             this.add(newParent);
             this.leaf = false;
             
         } 
+    }
+    
+    public void addParent(Branch a, BranchList b){
+        for(Branch branch: b.branches){
+            branch.parent = a;
+            branch.currentList = b;
+        }
+        b.parent = a;
+        
     }
     //make a function to search for parent and select leftmost right value recursively
     public Branch findParent(BranchList tree){
@@ -124,6 +138,10 @@ public class BranchList {
                 if(b.value==number){
                     temp.branches.remove(b);
                     deleted = true;
+                    if(temp.parent.value==number){
+                        temp.parent.value = temp.branches.get(0).value;
+                        addParent(temp.parent, temp);
+                    }
                     break;
                 }
             }

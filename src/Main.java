@@ -1,6 +1,10 @@
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
@@ -16,26 +20,65 @@ import java.util.Scanner;
  */
 public class Main {
     
-    public static void main(String [] args) throws FileNotFoundException{
-//        Scanner reader = new Scanner(new FileReader(args[0]));
-//        String input = null;
-        
+    public static void main(String [] args) throws FileNotFoundException, IOException{
+        Scanner reader = new Scanner(new FileReader(args[0]));
+        String input = null;
+        File file = new File("output.txt");
+
+        // if file doesnt exists, then create it
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        FileWriter fw = new FileWriter(file.getAbsoluteFile());
+        BufferedWriter bw = new BufferedWriter(fw);
+  
         BranchList rootList = new BranchList();
         rootList.leaf = true;
-        rootList.add(new Branch(5));
-        rootList.add(new Branch(10));
-        rootList.add(new Branch(20));
-        rootList.add(new Branch(15));
-        rootList.add(new Branch(21));
-        rootList.find(15);
-        rootList.delete(10);
-        rootList.find(10);
+
+        while((input = reader.nextLine()) != null){
+            String [] commands = input.trim().split(" ");
+        if(commands[0].toUpperCase().equals("I")){
+            int i = Integer.parseInt(commands[1]);
+            rootList.add(new Branch(i));
+            
+        } else if(commands[0].toUpperCase().equals("D")){
+            int d = Integer.parseInt(commands[1]);
+            rootList.delete(d);
+            
+        } else if(commands[0].toUpperCase().equals("F")) {
+            int f = Integer.parseInt(commands[1]);
+            rootList.find(f);
+            //bw.write(content);
+            
+        }
+        }
 //        while((input = reader.nextLine()) !=null){
 //            String [] command;
 //            command = input.trim().split(" ");
 //        }
         
         
+        
+        
+    }
+    public void printTree(BranchList rootList) {
+        for (Branch a : rootList.branches) {
+            System.out.printf("[%d]", a.value);
+        }
+        System.out.println();
+        BranchList current = rootList;
+        while (!current.leaf) {
+            for (Branch a : rootList.branches) {
+                for (Branch b : a.left.branches) {
+                    System.out.printf("[%d]", b.value);
+
+                }
+            }
+            for( Branch c : current.branches.getLast().right.branches){
+                    System.out.printf("[%d]", c.value);
+            }
+        }
         
         
     }
