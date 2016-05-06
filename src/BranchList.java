@@ -14,7 +14,6 @@ import java.util.LinkedList;
 public class BranchList {
     
     LinkedList<Branch> branches = new LinkedList<>();
-    BranchList leftSibling = null;
     Branch parent = null;
     boolean leaf = false;
     
@@ -88,10 +87,10 @@ public class BranchList {
             addParent(newParent, right);
             newParent.left = this;
             newParent.right = right;  
-            newParent.right.leftSibling = newParent.left;
             if(parent.currentList.overflow()){
                 overfilled();
             }
+            fixBranches(parent.currentList);
             //if theer is no parent then this is a first time split.
         } else {
             BranchList left = new BranchList();
@@ -111,14 +110,26 @@ public class BranchList {
             addParent(newParent, left);
             newParent.currentList = this;
             System.out.println("Splitting the list... promote "+ newParent.value + " as a key");
-            right.leftSibling = left;
             this.add(newParent);
             this.leaf = false;
             
         } 
     }
+    //makes sure all branches have correct left and right children
+    public void fixBranches(BranchList bl){
+        for(int i = 0; i < bl.branches.size(); i++){
+            if(i == 0){
+                 continue;
+            } else {
+                bl.branches.get(i).left = bl.branches.get(i-1).right;
+                //bl.branches.get(i).right.leftSibling = bl.branches.get(i).left;
+            }
+        }
+        
+    }
     
     public void addParent(Branch a, BranchList b){
+        a.parent = null;
         for(Branch branch: b.branches){
             branch.parent = a;
             branch.currentList = b;
