@@ -1,0 +1,15 @@
+100 added to the treeItem 100 was inserted into the tree
+200 added to the treeItem 200 was inserted into the tree
+300 added to the treeItem 300 was inserted into the tree
+Item 200 was deleted from the tree
+Item 200 was not found on the tree
+120 added to the treeItem 120 was inserted into the tree
+240 added to the treeItem 240 was inserted into the tree
+310 added to the treeSplitting the list... promote 240 as a key240 added to the treeItem 310 was inserted into the tree
+400 added to the treeItem 400 was inserted into the tree
+500 added to the treeSplitting the list... promote 310 as a key310 added to the treeItem 500 was inserted into the tree
+200 added to the treeItem 200 was inserted into the tree
+150 added to the treeItem 150 was inserted into the tree
+175 added to the treeSplitting the list... promote 150 as a key150 added to the treeItem 175 was inserted into the tree
+	[150][240][310]
+[100][120] [150][175][200] [240][300] [310][400][500] 

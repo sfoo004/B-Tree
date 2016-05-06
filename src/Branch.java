@@ -1,3 +1,7 @@
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,13 +20,15 @@ public class Branch {
     BranchList right = null;
     boolean leaf = false;
     Branch parent;
+    BufferedWriter bw;
     
     
-    Branch(int value){
+    Branch(int value, BufferedWriter bw){
         this.value = value;
+        this.bw = bw;
     }
     
-    protected void insert(Branch b) {
+    protected void insert(Branch b) throws IOException {
         if (!leaf) {
             if (b.value < value) { // check if it belongs in left leaf
                 if (left.hasRoom()) {
@@ -41,40 +47,4 @@ public class Branch {
             return right.find(number);
         }  
     }
-      
-    
-//    protected boolean hasOverflow(){
-//        return left.overflow() || right.overflow();
-//    }
-//    
-//    
-//    protected boolean remove(int b.value){
-//        boolean deleted = false;
-//        //deleted value is a branch
-//        if(b.value == value){
-//            //remove value from left branch
-//            if(left.values.contains(b.value)){
-//                left.delete(b.value);
-//            } else { // remove from right branch
-//                right.delete(b.value);
-//            }
-//            //get highest left value
-//            if(left.values.size() > 0){
-//                value = left.values.getLast();
-//            }
-//            //get lowest right value
-//            else if (right.values.size() > 0){
-//                value = right.values.getFirst();
-//            }
-//            deleted = true;
-//        } else {
-//            if(b.value < value){
-//                deleted = left.delete(b.value);   
-//            } else {
-//                deleted = right.delete(b.value);
-//            }
-//        }
-//        
-//        return deleted;
-//    }
 }

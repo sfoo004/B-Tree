@@ -1,4 +1,6 @@
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 
 /*
@@ -16,8 +18,10 @@ public class BranchList {
     LinkedList<Branch> branches = new LinkedList<>();
     Branch parent = null;
     boolean leaf = false;
+    BufferedWriter bw;
     
-    BranchList(){      
+    BranchList(){
+        bw = Main.bw;
     }
     
      protected boolean hasRoom(){
@@ -27,7 +31,7 @@ public class BranchList {
     protected boolean overflow(){
         return branches.size() > 4;
     }
-    protected void insertBranch(Branch b){
+    protected void insertBranch(Branch b) throws IOException{
         boolean added = false;
         for(int i = 0; i < branches.size(); i++){
             if(b.value > branches.get(i).value){
@@ -36,17 +40,17 @@ public class BranchList {
                 added = true;
                 b.leaf = this.leaf;
                 branches.add(i, b);
-                System.out.println(b.value + " added to the tree");
+                b.bw.write(b.value + " added to the tree\n");
                 break;
             }
         }
         if(!added){
             branches.add(b);
-            System.out.println(b.value + " added to the tree");
+            b.bw.write(b.value + " added to the tree\n");
         }
     }
     //adds item to Branch. Already checked for over flow
-    protected void add(Branch b){
+    protected void add(Branch b) throws IOException{
         if(leaf){
             insertBranch(b);
             if(overflow()){
@@ -72,7 +76,7 @@ public class BranchList {
         }
     }
     //splits the overfill
-    public void overfilled(){
+    public void overfilled() throws IOException{
         //if there is a parent then just add on to parents value
         if(parent != null){
             BranchList right = new BranchList();
@@ -82,7 +86,7 @@ public class BranchList {
             right.branches.add(branches.remove(2));
             right.branches.add(branches.remove(2));
             Branch newParent = findParent(right);
-            System.out.println("Splitting the list... promote "+ newParent.value + " as a key");
+            newParent.bw.write("Splitting the list... promote "+ newParent.value + " as a key\n");
             parent.currentList.insertBranch(newParent);
             addParent(newParent, right);
             newParent.left = this;
@@ -109,7 +113,7 @@ public class BranchList {
             addParent(newParent, right);
             addParent(newParent, left);
             newParent.currentList = this;
-            System.out.println("Splitting the list... promote "+ newParent.value + " as a key");
+            newParent.bw.write("Splitting the list... promote "+ newParent.value + " as a key\n");
             this.add(newParent);
             this.leaf = false;
             
